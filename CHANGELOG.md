@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [3.0.0](https://github.com/maolovecoding/simple-lowcode-vue/compare/v2.0.0...v3.0.0) (2023-01-05)
+
+
+* feat: 🎸 init ([4d6eb23](https://github.com/maolovecoding/simple-lowcode-vue/commit/4d6eb23))
+
+
+### 💥 BREAKING CHANGES
+
+* 🧨 init
+
+✅ Closes: no
+
+
+
 # [2.0.0](https://github.com/maolovecoding/simple-lowcode-vue/compare/v1.0.0...v2.0.0) (2023-01-05)
 
 
