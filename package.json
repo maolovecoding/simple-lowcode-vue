@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "prepare": "husky install",
-    "commit": "npm run release && cz",
+    "commit": "cz",
     "release": "standard-version --preset gitmoji-config"
   },
   "dependencies": {
