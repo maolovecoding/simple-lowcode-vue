@@ -1,7 +1,7 @@
 {
   "name": "simple-lowcode-vue",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "commonjs",
   "scripts": {
     "dev": "vite",
@@ -9,8 +9,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "prepare": "husky install",
-    "commit": "cz",
-    "release": "sstandard-version --preset gitmoji-config"
+    "commit": "npm run release && cz",
+    "release": "standard-version --preset gitmoji-config"
   },
   "dependencies": {
     "vue": "^3.2.45"
