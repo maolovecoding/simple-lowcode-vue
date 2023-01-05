@@ -10,7 +10,7 @@
     "test": "vitest",
     "prepare": "husky install",
     "commit": "cz",
-    "release": "standard-version"
+    "release": "sstandard-version --preset gitmoji-config"
   },
   "dependencies": {
     "vue": "^3.2.45"
@@ -22,6 +22,7 @@
     "@typescript-eslint/parser": "^5.48.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "commitizen": "^4.2.6",
+    "conventional-changelog-gitmoji-config": "^1.4.4",
     "cz-conventional-changelog": "^3.3.0",
     "cz-customizable": "^7.0.0",
     "eslint": "^8.31.0",
