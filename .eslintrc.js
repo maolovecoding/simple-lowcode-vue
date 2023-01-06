@@ -2,7 +2,7 @@ module.exports = {
   "env": {
     "browser": true,
     "commonjs": true,
-    "es2021": true
+    "es2022": true
   },
   "extends": [
     "eslint:recommended",
@@ -22,6 +22,5 @@ module.exports = {
     "prettier",
   ],
   "rules": {
-    "prettier/prettier": "error"
   }
 }
