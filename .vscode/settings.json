@@ -1,5 +1,5 @@
 {
-  "cSpell.words": [
-    "gsap"
-  ]
+  "cSpell.words": ["gsap"],
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true
 }
