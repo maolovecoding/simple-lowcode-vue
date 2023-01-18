@@ -2,3 +2,4 @@
 postcss.*
 tailwind.*
 commitlint.*
+components.d.ts

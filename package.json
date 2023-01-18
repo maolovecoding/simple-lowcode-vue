@@ -13,6 +13,7 @@
     "release": "standard-version --preset gitmoji-config"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
     "@vueuse/core": "^9.10.0",
     "@vueuse/math": "^9.10.0",
     "@vueuse/rxjs": "^9.10.0",
@@ -51,6 +52,7 @@
     "standard-version": "^9.5.0",
     "typescript": "^4.9.3",
     "unplugin-auto-import": "^0.12.1",
+    "unplugin-element-plus": "^0.4.1",
     "unplugin-vue-components": "^0.22.12",
     "vite": "^4.0.0",
     "vitest": "^0.26.3",
