@@ -1,8 +1,10 @@
+import { CSSProperties } from "vue";
+
 /**
  * @Author: 毛毛
  * @Date: 2023-01-06 23:15:38
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-17 14:24:05
+ * @Last Modified time: 2023-01-19 14:02:28
  * 初始化配置
  */
 export default {
@@ -45,10 +47,12 @@ export interface EditContainerSchema {
   height: string | number;
 }
 
-export interface EditBlocksSchema {
+export interface EditBlocksSchema extends CSSProperties {
   top: number;
   left: number;
-  zIndex: number;
+  zIndex?: number;
   key: string;
-  color: string;
+  color?: string;
+  alignCenter?: boolean; // 标识是否居中 从物料库第一次拖拽出来的时候应该居中
+  focus?: boolean; // 在画布的组件是否获取到了焦点 获取了焦点可以拖拽
 }

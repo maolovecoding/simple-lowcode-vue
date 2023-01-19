@@ -18,6 +18,7 @@ specifiers:
   copy-to-clipboard: ^3.3.3
   cz-conventional-changelog: ^3.3.0
   cz-customizable: ^7.0.0
+  deepcopy: ^2.1.0
   echarts: ^5.4.1
   element-plus: ^2.2.28
   eslint: ^8.31.0
@@ -51,6 +52,7 @@ dependencies:
   '@vueuse/rxjs': 9.10.0_rxjs@7.8.0+vue@3.2.45
   codemirror: 6.0.1
   copy-to-clipboard: 3.3.3
+  deepcopy: registry.npmmirror.com/deepcopy/2.1.0
   echarts: 5.4.1
   element-plus: 2.2.28_vue@3.2.45
   gsap: 3.11.4
@@ -1424,7 +1426,7 @@ packages:
       get-func-name: 2.0.0
       loupe: 2.3.6
       pathval: 1.1.1
-      type-detect: 4.0.8
+      type-detect: registry.npmmirror.com/type-detect/4.0.8
     dev: true
 
   /chalk/2.4.2:
@@ -1977,7 +1979,7 @@ packages:
     resolution: {integrity: sha512-WaEtAOpRA1MQ0eohqZjpGD8zdI0Ovsm8mmFhaDN8dvDZzyoUMcYDnf5Y6iu7HTXxf8JDS23qWa4a+hKCDyOPzw==}
     engines: {node: '>=6'}
     dependencies:
-      type-detect: 4.0.8
+      type-detect: registry.npmmirror.com/type-detect/4.0.8
     dev: true
 
   /deep-is/0.1.4:
@@ -4265,11 +4267,6 @@ packages:
       prelude-ls: 1.2.1
     dev: true
 
-  /type-detect/4.0.8:
-    resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==}
-    engines: {node: '>=4'}
-    dev: true
-
   /type-fest/0.18.1:
     resolution: {integrity: sha512-OIAYXk8+ISY+qTOwkHtKqzAuxchoMiD9Udx+FSGQDuiRR+PJKJHc2NJAXlbhkGwTt/4/nKZxELY1w3ReWOL8mw==}
     engines: {node: '>=10'}
@@ -5080,6 +5077,14 @@ packages:
       fsevents: registry.npmmirror.com/fsevents/2.3.2
     dev: true
 
+  registry.npmmirror.com/deepcopy/2.1.0:
+    resolution: {integrity: sha512-8cZeTb1ZKC3bdSCP6XOM1IsTczIO73fdqtwa2B0N15eAz7gmyhQo+mc5gnFuulsgN3vIQYmTgbmQVKalH1dKvQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/deepcopy/-/deepcopy-2.1.0.tgz}
+    name: deepcopy
+    version: 2.1.0
+    dependencies:
+      type-detect: registry.npmmirror.com/type-detect/4.0.8
+    dev: false
+
   registry.npmmirror.com/errno/0.1.8:
     resolution: {integrity: sha512-dJ6oBr5SQ1VSd9qkk7ByRgb/1SH4JZjCHSW/mr63/QcXO9zLVxvJ6Oy13nio03rxpSnVDDjFor75SjVeZWPW/A==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/errno/-/errno-0.1.8.tgz}
     name: errno
@@ -5276,6 +5281,12 @@ packages:
     dependencies:
       is-number: registry.npmmirror.com/is-number/7.0.0
     dev: true
+
+  registry.npmmirror.com/type-detect/4.0.8:
+    resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/type-detect/-/type-detect-4.0.8.tgz}
+    name: type-detect
+    version: 4.0.8
+    engines: {node: '>=4'}
 
   registry.npmmirror.com/uglify-js/3.17.4:
     resolution: {integrity: sha512-T9q82TJI9e/C1TAxYvfb16xO120tMVFZrGA3f9/P4424DNu6ypK103y0GPFVa17yotwSyZW5iYXgjYHkGrJW/g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/uglify-js/-/uglify-js-3.17.4.tgz}

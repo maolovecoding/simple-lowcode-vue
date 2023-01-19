@@ -2,9 +2,9 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:24
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-17 14:23:43
+ * @Last Modified time: 2023-01-19 14:32:23
  */
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { IEditCanvasProps } from "./inedx.props";
 import "./index.style.less";
 export default defineComponent({
@@ -12,14 +12,19 @@ export default defineComponent({
     ...IEditCanvasProps
   },
   setup(props, { slots }) {
-    console.log(props.contentStyle);
+    // 点击整个容器 清除所有选中的组件
+    // const handleContainerMousedown = (e: MouseEvent) => {};
     return () => {
       return (
         <div class="editor-canvas-container">
           {/* 产生滚动条 */}
           <div class="editor-canvas-container-canvas">
             {/* 产生内容区 */}
-            <div style={props.contentStyle} class="editor-canvas-container-canvas__content">
+            <div
+              style={props.contentStyle}
+              class="editor-canvas-container-canvas__content"
+              ref={props.containerRef}
+              onMousedown={props.conatinerMouseDown}>
               {slots.default?.()}
             </div>
           </div>
