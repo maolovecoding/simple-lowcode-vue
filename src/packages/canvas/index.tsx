@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:24
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-19 14:32:23
+ * @Last Modified time: 2023-01-20 11:45:26
  */
 import { defineComponent, ref } from "vue";
 import { IEditCanvasProps } from "./inedx.props";
@@ -27,6 +27,13 @@ export default defineComponent({
               onMousedown={props.conatinerMouseDown}>
               {slots.default?.()}
             </div>
+            {/* 辅助线 */}
+            {props.markline?.x !== -1 && (
+              <div class="line-x" style={{ left: props.markline!.x + "px" }}></div>
+            )}
+            {props.markline?.y !== -1 && (
+              <div class="line-y" style={{ top: props.markline!.y + "px" }}></div>
+            )}
           </div>
         </div>
       );

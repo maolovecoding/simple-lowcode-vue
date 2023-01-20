@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:11
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-19 16:12:12
+ * @Last Modified time: 2023-01-20 11:52:25
  */
 import { computed, defineComponent, ref } from "vue";
 import deepcopy from "deepcopy";
@@ -45,12 +45,20 @@ const Editor = defineComponent({
     };
 
     // 2. 实现获取焦点 选中后可能就直接进行拖拽了
-    const [handleBlockMouseDown, handleContainerMousedown, computedFocusOrUnfocusComponents] =
-      useBlockFocus(configData, (e: MouseEvent) => {
-        // 焦点获取后进行拖拽
-        handleDraggerMousedown(e);
-      });
-    const handleDraggerMousedown = useBlockDragger(computedFocusOrUnfocusComponents);
+    const [
+      handleBlockMouseDown,
+      handleContainerMousedown,
+      computedFocusOrUnfocusComponents,
+      lastSelectedBlock
+    ] = useBlockFocus(configData, (e: MouseEvent) => {
+      // 焦点获取后进行拖拽
+      handleDraggerMousedown(e);
+    });
+    const [handleDraggerMousedown, markline] = useBlockDragger(
+      computedFocusOrUnfocusComponents,
+      lastSelectedBlock,
+      configData
+    );
 
     // 3. 实现拖拽多个元素的功能
     return () => {
@@ -71,12 +79,13 @@ const Editor = defineComponent({
               <Canvas
                 containerRef={containerRef}
                 contentStyle={canvasStyle.value}
+                markline={markline}
                 conatinerMouseDown={handleContainerMousedown}>
                 {configData.value?.blocks.map((block, index) => (
                   // 负责渲染
                   <EditBlock
                     block={block}
-                    onMouseDown={e => handleBlockMouseDown(e, block)}
+                    onMouseDown={e => handleBlockMouseDown(e, block, index)}
                     onUpdateEditBlock={block => handleUpdateEditBlock(block, index)}
                   />
                 ))}

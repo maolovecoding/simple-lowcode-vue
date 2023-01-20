@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:24
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-19 14:16:52
+ * @Last Modified time: 2023-01-20 10:03:39
  */
 import { computed, CSSProperties, defineComponent, inject, onMounted, ref } from "vue";
 import { IEditBlockProps, IEditBlockEmits } from "./index.props";
@@ -26,17 +26,19 @@ export default defineComponent({
     const blockRef = ref<HTMLDivElement>();
     onMounted(() => {
       // 获取容器的宽高
+      const { offsetWidth, offsetHeight } = blockRef.value!;
       // console.log(blockRef.value);
+      const block = { ...props.block! };
       if (props.block?.alignCenter) {
-        const { offsetWidth, offsetHeight } = blockRef.value!;
         // 说明是拖拽松手的时候 此时需要居中
-        const block = { ...props.block! };
         block.left = block.left - offsetWidth / 2;
         block.top = block.top - offsetHeight / 2;
         block.alignCenter = false;
-        // props.block.alignCenter = false;
-        emit("updateEditBlock", block);
       }
+      // 增加宽高
+      block.width = offsetWidth;
+      block.height = offsetHeight;
+      emit("updateEditBlock", block);
     });
     const handleMouseDown = (e: MouseEvent) => {
       e.preventDefault();

@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 14:13:50
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-19 14:34:50
+ * @Last Modified time: 2023-01-20 11:42:54
  */
 import { CSSProperties, PropType, Ref } from "vue";
 export const IEditCanvasProps = {
@@ -16,5 +16,9 @@ export const IEditCanvasProps = {
   conatinerMouseDown: {
     type: Function as PropType<(e: MouseEvent) => void>,
     default: () => () => {}
+  },
+  markline: {
+    type: Object as PropType<{ x: number; y: number }>,
+    required: true
   }
 };
