@@ -2,12 +2,13 @@
  * @Author: 毛毛
  * @Date: 2023-01-19 13:55:40
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-20 10:11:08
+ * @Last Modified time: 2023-01-20 14:52:22
  * @description 实现菜单的拖拽
  */
 import { EditSchema } from "@/schema/edit/edit.schema";
 import { Ref } from "vue";
 import { IComponent } from "../utils/editor-config";
+import { events, EVENT_NAMES } from "../utils/events";
 
 export const useMenuDragger = <T extends HTMLDivElement | undefined>(
   props: { containerRef: Ref<T>; editConfigData: EditSchema },
@@ -57,12 +58,15 @@ export const useMenuDragger = <T extends HTMLDivElement | undefined>(
     props.containerRef?.value?.addEventListener("dragover", dragover);
     props.containerRef?.value?.addEventListener("dragleave", dragleave);
     props.containerRef?.value?.addEventListener("drop", drop);
+    // TODO 发布 dragstart事件
+    events.emit(EVENT_NAMES.DRAGSTART);
   };
   const handleDragend = (e: DragEvent, component: IComponent) => {
     props.containerRef?.value?.removeEventListener("dragenter", dragenter);
     props.containerRef?.value?.removeEventListener("dragover", dragover);
     props.containerRef?.value?.removeEventListener("dragleave", dragleave);
     props.containerRef?.value?.removeEventListener("drop", drop);
+    events.emit(EVENT_NAMES.DRAGEND);
   };
   return [handleDragstart, handleDragend] as const;
 };

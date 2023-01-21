@@ -2,11 +2,12 @@
  * @Author: 毛毛
  * @Date: 2023-01-19 16:07:38
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-20 11:55:43
+ * @Last Modified time: 2023-01-21 15:15:02
  * @description 每个组件的拖拽
  */
 import { EditBlocksSchema, EditSchema } from "@/schema/edit/edit.schema";
 import { ComputedRef, reactive, WritableComputedRef } from "vue";
+import { events, EVENT_NAMES } from "../utils/events";
 
 export interface ILineY {
   showTop: number; // 什么时候显示顶部的辅助线
@@ -40,7 +41,8 @@ export const useBlockDragger = (
     startTop: 0,
     startPos: [] as { top: number; left: number }[],
     // 记录辅助线 x 距离画布左侧的距离
-    lines: {} as ILines // 来做辅助线
+    lines: {} as ILines, // 来做辅助线
+    dragging: false // 是否正在拖拽
   };
   // 辅助线
   const markline = reactive<{ x: number; y: number }>({
@@ -55,6 +57,7 @@ export const useBlockDragger = (
       startY: e.clientY,
       startLeft: lastSelectedBlock.value!.left,
       startTop: lastSelectedBlock.value!.top,
+      dragging: false,
       startPos: computedFocusOrUnfocusComponents.value.focus.map(({ left, top }) => ({
         top,
         left
@@ -109,6 +112,10 @@ export const useBlockDragger = (
   };
   const mousemove = (e: MouseEvent) => {
     let { clientX: moveX, clientY: moveY } = e;
+    if (!dragState.dragging) {
+      dragState.dragging = true;
+      events.emit(EVENT_NAMES.DRAGSTART);
+    }
     // 记录当前组件最新的left top 去线里面找到需要显示的辅助线
     // 鼠标移动后 - 移动前 + left
     const left = moveX - dragState.startX + dragState.startLeft,
@@ -151,6 +158,10 @@ export const useBlockDragger = (
     document.removeEventListener("mouseup", mouseup);
     markline.x = -1;
     markline.y = -1; // 鼠标抬起去除辅助线
+    if (dragState.dragging) {
+      dragState.dragging = false;
+      events.emit(EVENT_NAMES.DRAGEND);
+    }
   };
   return [mousedown, markline] as const; // draggerMousedown
 };

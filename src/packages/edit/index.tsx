@@ -2,10 +2,11 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:11
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-20 11:52:25
+ * @Last Modified time: 2023-01-20 15:06:46
  */
 import { computed, defineComponent, ref } from "vue";
 import deepcopy from "deepcopy";
+import { ElButton } from "element-plus";
 import Configuration from "../configuration";
 import Material from "../material";
 import EditBlock from "../edit-block";
@@ -13,7 +14,7 @@ import { IEditProps, IEditEmits } from "./index.props";
 import "./index.style.less";
 import Canvas from "../canvas";
 import { EditBlocksSchema, EditSchema } from "@/schema/edit/edit.schema";
-import { useBlockDragger, useBlockFocus } from "../hooks";
+import { useBlockDragger, useBlockFocus, useCommand } from "../hooks";
 const Editor = defineComponent({
   name: "EditorVue",
   props: {
@@ -61,10 +62,33 @@ const Editor = defineComponent({
     );
 
     // 3. 实现拖拽多个元素的功能
+
+    // TODO 菜单栏按钮 后续抽离 icon
+    const { commands } = useCommand(configData);
+    const btns = [
+      { label: "撤销", handler: () => commands.get("undo")!() },
+      { label: "重做", handler: () => commands.get("redo")!() },
+      { label: "撤销", handler: () => {} },
+      { label: "撤销", handler: () => {} }
+    ];
     return () => {
       return (
         <div>
-          <div style={{ height: "50px" }}>菜单栏</div>
+          {/* 菜单 */}
+          <div
+            style={{
+              height: "50px",
+              display: "flex",
+              justifyContent: "center"
+            }}>
+            {btns.map((btn, index) => {
+              return (
+                <div style={{ marginLeft: "10px" }}>
+                  <ElButton onClick={btn.handler}>{btn.label}</ElButton>
+                </div>
+              );
+            })}
+          </div>
           <div class="edit-container-div">
             <div class="material-container">
               <Material
