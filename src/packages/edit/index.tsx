@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:11
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-20 15:06:46
+ * @Last Modified time: 2023-01-21 17:21:36
  */
 import { computed, defineComponent, ref } from "vue";
 import deepcopy from "deepcopy";
@@ -15,6 +15,7 @@ import "./index.style.less";
 import Canvas from "../canvas";
 import { EditBlocksSchema, EditSchema } from "@/schema/edit/edit.schema";
 import { useBlockDragger, useBlockFocus, useCommand } from "../hooks";
+import { useDialog } from "../components";
 const Editor = defineComponent({
   name: "EditorVue",
   props: {
@@ -68,9 +69,32 @@ const Editor = defineComponent({
     const btns = [
       { label: "撤销", handler: () => commands.get("undo")!() },
       { label: "重做", handler: () => commands.get("redo")!() },
-      { label: "撤销", handler: () => {} },
-      { label: "撤销", handler: () => {} }
+      {
+        label: "导入",
+        handler: () => {
+          useDialog({
+            title: "导入json schema",
+            content: "",
+            footer: true,
+            confirm(content) {
+              // configData.value = JSON.parse(content);
+              // 支持更新容器
+              commands.get("updateContainer")!(JSON.parse(content));
+            }
+          });
+        }
+      },
+      {
+        label: "导出",
+        handler: () => {
+          useDialog({
+            title: "导出 JSON schema",
+            content: JSON.stringify(configData.value, null, 2) // TODO  后续修复
+          });
+        }
+      }
     ];
+
     return () => {
       return (
         <div>

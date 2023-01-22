@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-20 14:21:48
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-21 15:36:55
+ * @Last Modified time: 2023-01-21 17:29:40
  * @description 实现撤销 重做等
  */
 
@@ -15,15 +15,15 @@ export const useCommand = (configData: WritableComputedRef<EditSchema | undefine
   const state = {
     current: -1, // 前进后退的索引值
     queue: [] as { redo: () => void; undo?: () => void }[], // 用户在画布上的操作
-    commands: new Map<string, () => void>(), // 命令和执行功能的映射表
+    commands: new Map<string, (...args: any[]) => void>(), // 命令和执行功能的映射表
     commandArray: [] as ICommand[], // 存放所有的命令
     destroyArray: [] as (() => void)[] // 销毁的命令
   }; // 状态
   const registry = (command: ICommand) => {
     state.commandArray.push(command);
     // 注册命令对应的执行函数
-    state.commands.set(command.name, () => {
-      const { redo, undo } = command.execute();
+    state.commands.set(command.name, (...args: any[]) => {
+      const { redo, undo } = command.execute(...args);
       redo();
       if (!command.pushQueue) return;
       // 需要放到队列里面
@@ -97,6 +97,26 @@ export const useCommand = (configData: WritableComputedRef<EditSchema | undefine
       };
     }
   });
+  // 更新整个容器 导入导出
+  registry({
+    name: "updateContainer",
+    pushQueue: true,
+    execute(...args: any[]) {
+      console.log(args);
+      const state = {
+        before: configData.value,
+        after: args[0] // 最新值
+      };
+      return {
+        redo() {
+          configData.value = state.after;
+        },
+        undo() {
+          configData.value = state.before;
+        }
+      };
+    }
+  });
   const keyboard = (() => {
     const onKeydown = (e: KeyboardEvent) => {
       const { ctrlKey, key } = e;
@@ -108,7 +128,6 @@ export const useCommand = (configData: WritableComputedRef<EditSchema | undefine
       const shortcutKey = keyString.join("+");
       state.commandArray.forEach(({ keybord, name }) => {
         if (!keybord) return; // 没有键盘事件
-        console.log(keybord, shortcutKey);
         if (keybord === shortcutKey) {
           state.commands.get(name)!();
           e.preventDefault();
@@ -139,7 +158,7 @@ export interface ICommand {
   name: string;
   keybord?: string;
   init?: () => () => void;
-  execute: () => { redo: () => void; undo?: () => void };
+  execute: (...args: any[]) => { redo: () => void; undo?: () => void };
   pushQueue?: boolean; // 放入queue的操作类型
   before?: EditBlocksSchema[];
 }
