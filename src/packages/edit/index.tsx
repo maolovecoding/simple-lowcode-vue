@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:11
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-21 17:21:36
+ * @Last Modified time: 2023-01-22 19:35:00
  */
 import { computed, defineComponent, ref } from "vue";
 import deepcopy from "deepcopy";
@@ -25,6 +25,8 @@ const Editor = defineComponent({
     ...IEditEmits
   },
   setup(props, { emit }) {
+    // TODO 支持预览 预览时不能再拖拽组件 可以点击 输入内容等
+    const previewRef = ref(false);
     // 渲染的画布的配置schema 已经渲染的组件blocks
     const configData = computed({
       get: () => props.modelValue,
@@ -51,8 +53,9 @@ const Editor = defineComponent({
       handleBlockMouseDown,
       handleContainerMousedown,
       computedFocusOrUnfocusComponents,
-      lastSelectedBlock
-    ] = useBlockFocus(configData, (e: MouseEvent) => {
+      lastSelectedBlock,
+      clearBlocksFocus
+    ] = useBlockFocus(configData, previewRef, (e: MouseEvent) => {
       // 焦点获取后进行拖拽
       handleDraggerMousedown(e);
     });
@@ -65,7 +68,7 @@ const Editor = defineComponent({
     // 3. 实现拖拽多个元素的功能
 
     // TODO 菜单栏按钮 后续抽离 icon
-    const { commands } = useCommand(configData);
+    const { commands } = useCommand(configData, computedFocusOrUnfocusComponents);
     const btns = [
       { label: "撤销", handler: () => commands.get("undo")!() },
       { label: "重做", handler: () => commands.get("redo")!() },
@@ -92,6 +95,31 @@ const Editor = defineComponent({
             content: JSON.stringify(configData.value, null, 2) // TODO  后续修复
           });
         }
+      },
+      {
+        label: "置顶",
+        handler: () => {
+          commands.get("placeTop")?.();
+        }
+      },
+      {
+        label: "置底",
+        handler: () => {
+          commands.get("placeBottom")?.();
+        }
+      },
+      {
+        label: "选中删除", // ctrl + d
+        handler: () => {
+          commands.get("delete")?.();
+        }
+      },
+      {
+        label: () => (previewRef.value ? "预览" : "编辑"),
+        handler: () => {
+          previewRef.value = !previewRef.value;
+          clearBlocksFocus();
+        }
       }
     ];
 
@@ -108,7 +136,9 @@ const Editor = defineComponent({
             {btns.map((btn, index) => {
               return (
                 <div style={{ marginLeft: "10px" }}>
-                  <ElButton onClick={btn.handler}>{btn.label}</ElButton>
+                  <ElButton onClick={btn.handler}>
+                    {typeof btn.label === "function" ? btn.label() : btn.label}
+                  </ElButton>
                 </div>
               );
             })}
@@ -133,6 +163,7 @@ const Editor = defineComponent({
                   // 负责渲染
                   <EditBlock
                     block={block}
+                    preview={previewRef.value}
                     onMouseDown={e => handleBlockMouseDown(e, block, index)}
                     onUpdateEditBlock={block => handleUpdateEditBlock(block, index)}
                   />

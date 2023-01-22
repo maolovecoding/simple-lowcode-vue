@@ -2,16 +2,22 @@
  * @Author: 毛毛
  * @Date: 2023-01-20 14:21:48
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-21 17:29:40
+ * @Last Modified time: 2023-01-22 19:21:58
  * @description 实现撤销 重做等
  */
 
 import deepcopy from "deepcopy";
 import { EditBlocksSchema, EditSchema } from "@/schema/edit/edit.schema";
-import { onUnmounted, WritableComputedRef } from "vue";
+import { ComputedRef, onUnmounted, WritableComputedRef } from "vue";
 import { events, EVENT_NAMES } from "../utils/events";
 
-export const useCommand = (configData: WritableComputedRef<EditSchema | undefined>) => {
+export const useCommand = (
+  configData: WritableComputedRef<EditSchema | undefined>,
+  computedFocusOrUnfocusComponents: ComputedRef<{
+    focus: EditBlocksSchema[];
+    unfocus: EditBlocksSchema[];
+  }>
+) => {
   const state = {
     current: -1, // 前进后退的索引值
     queue: [] as { redo: () => void; undo?: () => void }[], // 用户在画布上的操作
@@ -31,7 +37,6 @@ export const useCommand = (configData: WritableComputedRef<EditSchema | undefine
       if (state.queue.length > 0) state.queue = state.queue.slice(0, state.current + 1);
       state.queue.push({ undo, redo });
       state.current++;
-      console.log(state.queue);
     });
   };
   // 重做
@@ -102,7 +107,6 @@ export const useCommand = (configData: WritableComputedRef<EditSchema | undefine
     name: "updateContainer",
     pushQueue: true,
     execute(...args: any[]) {
-      console.log(args);
       const state = {
         before: configData.value,
         after: args[0] // 最新值
@@ -113,6 +117,81 @@ export const useCommand = (configData: WritableComputedRef<EditSchema | undefine
         },
         undo() {
           configData.value = state.before;
+        }
+      };
+    }
+  });
+  // 置顶
+  registry({
+    name: "placeTop",
+    pushQueue: true,
+    execute() {
+      const state = {
+        before: deepcopy(configData.value!.blocks),
+        after: (() => {
+          const { focus, unfocus } = computedFocusOrUnfocusComponents.value;
+          const maxZIndex = unfocus.reduce(
+            (prev, block) => Math.max(prev, block.zIndex!),
+            -Infinity
+          );
+          focus.forEach(block => (block.zIndex = maxZIndex + 1));
+          return configData.value!.blocks;
+        })()
+      };
+      // 置顶就是找到所有blocks中zIndex最大的那个值，然后让获取焦点的组件的zIndex比其大一即可
+      return {
+        undo() {
+          configData.value = { ...configData.value!, blocks: state.before };
+        },
+        redo() {
+          configData.value = { ...configData.value!, blocks: state.after };
+        }
+      };
+    }
+  });
+  registry({
+    name: "placeBottom",
+    pushQueue: true,
+    execute() {
+      const state = {
+        before: deepcopy(configData.value!.blocks),
+        after: (() => {
+          const { focus, unfocus } = computedFocusOrUnfocusComponents.value;
+          let minZIndex = unfocus.reduce((prev, block) => Math.min(prev, block.zIndex!), Infinity);
+          if (minZIndex < 0) {
+            minZIndex = 0;
+            unfocus.forEach(block => (block.zIndex! += 1));
+          }
+          focus.forEach(block => (block.zIndex = minZIndex));
+          return configData.value!.blocks;
+        })()
+      };
+      // 置顶就是找到所有blocks中zIndex最大的那个值，然后让获取焦点的组件的zIndex比其大一即可
+      return {
+        undo() {
+          configData.value = { ...configData.value!, blocks: state.before };
+        },
+        redo() {
+          configData.value = { ...configData.value!, blocks: state.after };
+        }
+      };
+    }
+  });
+  // 删除
+  registry({
+    name: "delete",
+    pushQueue: true,
+    execute() {
+      const state = {
+        before: deepcopy(configData.value!.blocks),
+        after: computedFocusOrUnfocusComponents.value.unfocus // 未选中
+      };
+      return {
+        redo() {
+          configData.value = { ...configData.value!, blocks: state.after };
+        },
+        undo() {
+          configData.value = { ...configData.value!, blocks: state.before };
         }
       };
     }

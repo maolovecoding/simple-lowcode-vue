@@ -1,11 +1,11 @@
-import { computed, ref, WritableComputedRef } from "vue";
+import { computed, Ref, ref, WritableComputedRef } from "vue";
 import { EditBlocksSchema, EditSchema } from "@/schema/edit/edit.schema";
 
 /**
  * @Author: 毛毛
  * @Date: 2023-01-19 15:26:51
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-20 09:54:18
+ * @Last Modified time: 2023-01-22 19:26:37
  * @description 获取焦点
  */
 /**
@@ -13,6 +13,7 @@ import { EditBlocksSchema, EditSchema } from "@/schema/edit/edit.schema";
  */
 export const useBlockFocus = (
   configData: WritableComputedRef<EditSchema | undefined>,
+  previewRef: Ref<boolean>,
   focusHook: (e: MouseEvent) => void // 拖拽完以后回传拖拽事件给回调的hook
 ) => {
   const selectedIndex = ref(-1); // 表示没有一个组件被选中
@@ -29,6 +30,7 @@ export const useBlockFocus = (
     configData.value?.blocks.forEach(block => (block.focus = false));
   };
   const handleMouseDown = (e: MouseEvent, block: EditBlocksSchema, index: number) => {
+    if (previewRef.value) return;
     // block上规划一个属性 focus 获取焦点后focus变成true
     if (e.shiftKey) {
       if (computedFocusOrUnfocusComponents.value.focus.length <= 1) {
@@ -49,6 +51,7 @@ export const useBlockFocus = (
   };
   // 点击整个容器 清除所有选中的组件
   const handleContainerMousedown = (e: MouseEvent) => {
+    if (previewRef.value) return;
     clearBlocksFocus();
     selectedIndex.value = -1;
   };
@@ -56,6 +59,7 @@ export const useBlockFocus = (
     handleMouseDown,
     handleContainerMousedown,
     computedFocusOrUnfocusComponents,
-    lastSelectedBlock
+    lastSelectedBlock,
+    clearBlocksFocus
   ] as const;
 };
