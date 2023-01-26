@@ -15,6 +15,10 @@ export const IEditBlockProps = {
   preview: {
     type: Boolean,
     default: false
+  },
+  onContextmenu: {
+    type: Function as PropType<(e: MouseEvent) => void>,
+    default: () => () => {}
   }
 };
 export const IEditBlockEmits = {

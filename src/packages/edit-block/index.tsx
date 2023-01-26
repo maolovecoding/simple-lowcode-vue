@@ -59,7 +59,8 @@ export default defineComponent({
           class={getClassName()}
           style={{ ...blockStyle.value }}
           ref={blockRef}
-          onMousedown={handleMouseDown}>
+          onMousedown={handleMouseDown}
+          onContextmenu={props.onContextmenu}>
           {RenderComponent}
         </div>
       );

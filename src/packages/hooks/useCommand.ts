@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-20 14:21:48
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-22 19:21:58
+ * @Last Modified time: 2023-01-26 14:55:47
  * @description 实现撤销 重做等
  */
 
@@ -117,6 +117,34 @@ export const useCommand = (
         },
         undo() {
           configData.value = state.before;
+        }
+      };
+    }
+  });
+  // 更新某个组件
+  registry({
+    name: "updateBlock",
+    pushQueue: true,
+    execute(...args: any[]) {
+      const [newBlock, oldBlock] = args;
+      const state = {
+        before: configData.value!.blocks,
+        after: (() => {
+          // 一份新的block
+          const blocks = deepcopy(configData.value!.blocks);
+          const index = configData.value!.blocks.indexOf(oldBlock);
+          if (index > -1) {
+            blocks.splice(index, 1, newBlock);
+          }
+          return blocks;
+        })()
+      };
+      return {
+        redo() {
+          configData.value = { ...configData.value!, blocks: state.after };
+        },
+        undo() {
+          configData.value = { ...configData.value!, blocks: state.before };
         }
       };
     }

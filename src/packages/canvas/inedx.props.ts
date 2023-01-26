@@ -19,6 +19,6 @@ export const IEditCanvasProps = {
   },
   markline: {
     type: Object as PropType<{ x: number; y: number }>,
-    required: true
+    default: () => ({ x: -1, y: -1 })
   }
 };

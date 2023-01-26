@@ -2,11 +2,12 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:11
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-22 19:35:00
+ * @Last Modified time: 2023-01-26 14:57:17
  */
 import { computed, defineComponent, ref } from "vue";
 import deepcopy from "deepcopy";
 import { ElButton } from "element-plus";
+import { Delete } from "@element-plus/icons-vue";
 import Configuration from "../configuration";
 import Material from "../material";
 import EditBlock from "../edit-block";
@@ -15,7 +16,7 @@ import "./index.style.less";
 import Canvas from "../canvas";
 import { EditBlocksSchema, EditSchema } from "@/schema/edit/edit.schema";
 import { useBlockDragger, useBlockFocus, useCommand } from "../hooks";
-import { useDialog } from "../components";
+import { useDialog, useDropdown, DropdownItem } from "../components";
 const Editor = defineComponent({
   name: "EditorVue",
   props: {
@@ -64,6 +65,8 @@ const Editor = defineComponent({
       lastSelectedBlock,
       configData
     );
+
+    const editorCanvas = ref(true);
 
     // 3. 实现拖拽多个元素的功能
 
@@ -120,10 +123,109 @@ const Editor = defineComponent({
           previewRef.value = !previewRef.value;
           clearBlocksFocus();
         }
+      },
+      {
+        label: () => (editorCanvas.value ? "关闭" : "继续编辑"),
+        handler: () => {
+          editorCanvas.value = !editorCanvas.value;
+          clearBlocksFocus();
+        }
       }
     ];
+    // 鼠标右键唤起菜单
+    const handleBlockContextmenu = (e: MouseEvent, block: EditBlocksSchema) => {
+      e.preventDefault();
+      console.log(e.target);
+      // el 以哪个元素为准 产生一个dropdown
+      useDropdown({
+        el: e.target as HTMLElement,
+        content: () => (
+          <>
+            <DropdownItem onClick={() => commands.get("delete")!()}>删除</DropdownItem>
+            <DropdownItem
+              onClick={() => {
+                commands.get("placeTop")?.();
+              }}>
+              置顶
+            </DropdownItem>
+            <DropdownItem
+              onClick={() => {
+                commands.get("placeBottom")?.();
+              }}>
+              置底
+            </DropdownItem>
+            <DropdownItem
+              onClick={() => {
+                useDialog({
+                  title: "查看当前节点数据",
+                  content: JSON.stringify(block, null, 2) // TODO json
+                });
+              }}>
+              查看
+            </DropdownItem>
+            <DropdownItem
+              onClick={() => {
+                useDialog({
+                  title: "导入节点数据",
+                  content: "",
+                  footer: true,
+                  confirm(content) {
+                    commands.get("updateBlock")!(JSON.parse(content), block);
+                  }
+                });
+              }}>
+              导入
+            </DropdownItem>
+          </>
+        )
+      });
+    };
 
     return () => {
+      const render = editorCanvas.value ? (
+        <div class="edit-container-div">
+          <div class="material-container">
+            <Material
+              editConfigData={configData.value}
+              containerRef={containerRef}
+              onUpdateEditConfigData={handleUpdateEditConfigData}></Material>
+          </div>
+          <div class="configuration-container">
+            <Configuration />
+          </div>
+          <div class="editor-container">
+            <Canvas
+              containerRef={containerRef}
+              contentStyle={canvasStyle.value}
+              markline={markline}
+              conatinerMouseDown={handleContainerMousedown}>
+              {configData.value?.blocks.map((block, index) => (
+                // 负责渲染
+                <EditBlock
+                  block={block}
+                  preview={previewRef.value}
+                  onMouseDown={e => handleBlockMouseDown(e, block, index)}
+                  onContextmenu={e => handleBlockContextmenu(e, block)}
+                  onUpdateEditBlock={block => handleUpdateEditBlock(block, index)}
+                />
+              ))}
+            </Canvas>
+          </div>
+        </div>
+      ) : (
+        <div class="editor-container">
+          <Canvas containerRef={containerRef} contentStyle={canvasStyle.value}>
+            {configData.value?.blocks.map((block, index) => (
+              // 负责渲染
+              <EditBlock
+                block={block}
+                preview={previewRef.value}
+                onUpdateEditBlock={block => handleUpdateEditBlock(block, index)}
+              />
+            ))}
+          </Canvas>
+        </div>
+      );
       return (
         <div>
           {/* 菜单 */}
@@ -143,34 +245,7 @@ const Editor = defineComponent({
               );
             })}
           </div>
-          <div class="edit-container-div">
-            <div class="material-container">
-              <Material
-                editConfigData={configData.value}
-                containerRef={containerRef}
-                onUpdateEditConfigData={handleUpdateEditConfigData}></Material>
-            </div>
-            <div class="configuration-container">
-              <Configuration />
-            </div>
-            <div class="editor-container">
-              <Canvas
-                containerRef={containerRef}
-                contentStyle={canvasStyle.value}
-                markline={markline}
-                conatinerMouseDown={handleContainerMousedown}>
-                {configData.value?.blocks.map((block, index) => (
-                  // 负责渲染
-                  <EditBlock
-                    block={block}
-                    preview={previewRef.value}
-                    onMouseDown={e => handleBlockMouseDown(e, block, index)}
-                    onUpdateEditBlock={block => handleUpdateEditBlock(block, index)}
-                  />
-                ))}
-              </Canvas>
-            </div>
-          </div>
+          {render}
         </div>
       );
     };
