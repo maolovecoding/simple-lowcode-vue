@@ -2,11 +2,12 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 16:37:08
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-17 17:23:00
+ * @Last Modified time: 2023-01-26 17:58:36
  * @description 列表区可以显示所有的物料（默认使用elementPlus的组件）
  * schema key对应的组件映射关系
  */
 import { ElButton, ElInput } from "@/components/elementPlus";
+import { createColorProps, createInputProps, createSelectProps } from "./createComponentProps";
 export const createEditorConfig = () => {
   const componentList: IComponent[] = [];
   const componentMap = new Map<string, IComponent>();
@@ -26,26 +27,75 @@ registerConfig.register({
   label: "文本",
   preview: () => "预览文本",
   render: () => "实际文本",
-  key: "text"
+  key: "text",
+  props: {
+    text: createInputProps("文本内容"),
+    color: createColorProps("字体颜色"),
+    size: createSelectProps("字体大小", [
+      { label: "14px", value: "14px" },
+      { label: "16px", value: "16px" },
+      { label: "18px", value: "18px" },
+      { label: "20px", value: "20px" }
+    ])
+  }
 });
 
 registerConfig.register({
   label: "按钮",
   preview: () => <ElButton>按钮</ElButton>,
   render: () => <ElButton>按钮</ElButton>,
-  key: "button"
+  key: "button",
+  props: {
+    text: createInputProps("按钮内容"),
+    type: createSelectProps("按钮类型", [
+      { label: "基础", value: "primary" },
+      { label: "成功", value: "success" },
+      { label: "失败", value: "fail" },
+      { label: "警告", value: "waring" },
+      { label: "危险", value: "danger" },
+      { label: "文本", value: "text" }
+    ]),
+    size: createSelectProps("按钮大小", [
+      { label: "默认", value: "" },
+      { label: "大", value: "large" },
+      { label: "中等", value: "medium" },
+      { label: "小", value: "samll" },
+      { label: "极小", value: "mini" }
+    ])
+  }
 });
 registerConfig.register({
   label: "输入框",
   preview: () => <ElInput placeholder="预览输入框" />,
   render: () => <ElInput placeholder="渲染输入框" />,
-  key: "input"
+  key: "input",
+  props: {
+    text: createInputProps("文本内容")
+  }
 });
 export interface IComponent {
   label: string;
   preview: () => any;
   render: () => any;
   key: string;
+  props?: IComponentProps;
+}
+export type IComponentPropKeys = keyof IComponentProps;
+export interface IComponentProps {
+  text?: IProps;
+  color?: IProps;
+  size?: IProps;
+  type?: IProps;
+}
+export interface IProps {
+  label: string;
+  type: IPropType;
+  options?: IComponentPropOption[];
+}
+export type IPropType = "input" | "color" | "select";
+export interface IComponentPropOption {
+  label: string;
+  value: string;
 }
 
 export interface IRegisterConfig {

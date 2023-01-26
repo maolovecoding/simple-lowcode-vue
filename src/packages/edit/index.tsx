@@ -2,12 +2,11 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:11
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-26 14:57:17
+ * @Last Modified time: 2023-01-26 16:41:50
  */
 import { computed, defineComponent, ref } from "vue";
 import deepcopy from "deepcopy";
 import { ElButton } from "element-plus";
-import { Delete } from "@element-plus/icons-vue";
 import Configuration from "../configuration";
 import Material from "../material";
 import EditBlock from "../edit-block";
@@ -191,7 +190,7 @@ const Editor = defineComponent({
               onUpdateEditConfigData={handleUpdateEditConfigData}></Material>
           </div>
           <div class="configuration-container">
-            <Configuration />
+            <Configuration block={lastSelectedBlock.value} configData={configData.value} />
           </div>
           <div class="editor-container">
             <Canvas
