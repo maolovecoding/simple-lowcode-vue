@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:24
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-22 19:43:58
+ * @Last Modified time: 2023-01-27 18:41:37
  */
 import { computed, CSSProperties, defineComponent, inject, onMounted, ref } from "vue";
 import { IEditBlockProps, IEditBlockEmits } from "./index.props";
@@ -48,7 +48,9 @@ export default defineComponent({
     return () => {
       // 通过key拿到对应的组件 然后拿到渲染函数
       const component = config.componentMap.get(props.block!.key)!;
-      const RenderComponent = component.render();
+      // 拿到props
+      const componentProps = props.block?.props;
+      const RenderComponent = component.render(componentProps);
 
       const getClassName = () =>
         `edit-block ${

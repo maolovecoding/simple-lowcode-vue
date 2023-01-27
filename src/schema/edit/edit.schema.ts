@@ -4,7 +4,7 @@ import { CSSProperties } from "vue";
  * @Author: 毛毛
  * @Date: 2023-01-06 23:15:38
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-19 14:02:28
+ * @Last Modified time: 2023-01-27 18:57:24
  * 初始化配置
  */
 export default {
@@ -20,19 +20,30 @@ export default {
       left: 100,
       zIndex: 1,
       key: "text",
-      color: "red"
+      color: "red",
+      props: {
+        text: "听雨少年",
+        color: "#2ff",
+        size: "14px"
+      }
     },
     {
       top: 200,
       left: 200,
       zIndex: 10,
-      key: "button"
+      key: "button",
+      props: {
+        text: "按钮内容",
+        type: "primary",
+        size: "small"
+      }
     },
     {
       top: 500,
       left: 600,
       zIndex: 11,
-      key: "input"
+      key: "input",
+      props: {}
     }
   ]
 } as EditSchema;
@@ -55,4 +66,21 @@ export interface EditBlocksSchema extends CSSProperties {
   color?: string;
   alignCenter?: boolean; // 标识是否居中 从物料库第一次拖拽出来的时候应该居中
   focus?: boolean; // 在画布的组件是否获取到了焦点 获取了焦点可以拖拽
+  props: IEditBlockProp;
 }
+export interface IEditBlockProp {
+  text?: string;
+  color?: string;
+  size?: "default" | "large" | "small";
+  type?: IEditBlockButtonType;
+}
+
+export type IEditBlockButtonType =
+  | ""
+  | "default"
+  | "primary"
+  | "success"
+  | "warning"
+  | "info"
+  | "danger"
+  | "text";

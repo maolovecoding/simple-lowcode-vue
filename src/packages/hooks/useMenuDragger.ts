@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-19 13:55:40
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-20 14:52:22
+ * @Last Modified time: 2023-01-27 17:02:01
  * @description 实现菜单的拖拽
  */
 import { EditSchema } from "@/schema/edit/edit.schema";
@@ -38,7 +38,8 @@ export const useMenuDragger = <T extends HTMLDivElement | undefined>(
           left: e.offsetX,
           zIndex: 1,
           key: currentComponent!.key,
-          alignCenter: true
+          alignCenter: true,
+          props: {}
         }
       ]
     };

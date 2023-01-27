@@ -2,11 +2,12 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 16:37:08
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-26 17:58:36
+ * @Last Modified time: 2023-01-27 18:56:41
  * @description 列表区可以显示所有的物料（默认使用elementPlus的组件）
  * schema key对应的组件映射关系
  */
 import { ElButton, ElInput } from "@/components/elementPlus";
+import { IEditBlockProp } from "@/schema/edit/edit.schema";
 import { createColorProps, createInputProps, createSelectProps } from "./createComponentProps";
 export const createEditorConfig = () => {
   const componentList: IComponent[] = [];
@@ -26,7 +27,9 @@ export const registerConfig = createEditorConfig();
 registerConfig.register({
   label: "文本",
   preview: () => "预览文本",
-  render: () => "实际文本",
+  render: props => (
+    <span style={{ color: props?.color, fontSize: props?.size }}>{props?.text || "实际文本"}</span>
+  ),
   key: "text",
   props: {
     text: createInputProps("文本内容"),
@@ -43,7 +46,11 @@ registerConfig.register({
 registerConfig.register({
   label: "按钮",
   preview: () => <ElButton>按钮</ElButton>,
-  render: () => <ElButton>按钮</ElButton>,
+  render: props => (
+    <ElButton type={props?.type} size={props?.size}>
+      {props?.text || "按钮"}
+    </ElButton>
+  ),
   key: "button",
   props: {
     text: createInputProps("按钮内容"),
@@ -56,11 +63,11 @@ registerConfig.register({
       { label: "文本", value: "text" }
     ]),
     size: createSelectProps("按钮大小", [
-      { label: "默认", value: "" },
+      { label: "默认", value: "default" },
       { label: "大", value: "large" },
-      { label: "中等", value: "medium" },
-      { label: "小", value: "samll" },
-      { label: "极小", value: "mini" }
+      // { label: "中等", value: "medium" },
+      { label: "小", value: "samll" }
+      // { label: "极小", value: "mini" }
     ])
   }
 });
@@ -75,8 +82,8 @@ registerConfig.register({
 });
 export interface IComponent {
   label: string;
-  preview: () => any;
-  render: () => any;
+  preview: () => JSX.Element | string;
+  render: (props?: IEditBlockProp) => JSX.Element | string;
   key: string;
   props?: IComponentProps;
 }

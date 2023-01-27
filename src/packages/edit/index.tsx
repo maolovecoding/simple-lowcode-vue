@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:11
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-26 16:41:50
+ * @Last Modified time: 2023-01-27 19:13:49
  */
 import { computed, defineComponent, ref } from "vue";
 import deepcopy from "deepcopy";
@@ -16,6 +16,8 @@ import Canvas from "../canvas";
 import { EditBlocksSchema, EditSchema } from "@/schema/edit/edit.schema";
 import { useBlockDragger, useBlockFocus, useCommand } from "../hooks";
 import { useDialog, useDropdown, DropdownItem } from "../components";
+import "../global/index.less";
+
 const Editor = defineComponent({
   name: "EditorVue",
   props: {
@@ -190,7 +192,12 @@ const Editor = defineComponent({
               onUpdateEditConfigData={handleUpdateEditConfigData}></Material>
           </div>
           <div class="configuration-container">
-            <Configuration block={lastSelectedBlock.value} configData={configData.value} />
+            <Configuration
+              block={lastSelectedBlock.value}
+              configData={configData.value}
+              updateContainer={commands.get("updateContainer")}
+              updateBlock={commands.get("updateBlock")}
+            />
           </div>
           <div class="editor-container">
             <Canvas
