@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:45
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 19:09:59
+ * @Last Modified time: 2023-01-27 19:45:59
  * @description 属性配置
  */
 import { defineComponent, inject, reactive, watch } from "vue";
@@ -18,7 +18,7 @@ import {
 } from "element-plus";
 import { configKey } from "../config";
 import { IConfigurationProps } from "./index.props";
-import { IComponentPropKeys } from "../utils/editor-config";
+import { IComponentModel, IComponentPropKeys } from "../utils/editor-config";
 import { EditBlocksSchema, EditContainerSchema, IEditBlockProp } from "@/schema/edit/edit.schema";
 import deepcopy from "deepcopy";
 import { isNoKeysObject } from "../utils";
@@ -101,6 +101,20 @@ export default defineComponent({
                     </ElSelect>
                   )
                 }[propConfig.type]()}
+              </ElFormItem>
+            );
+          }
+        }
+        if (component && component.model) {
+          // {default: "默认标签名"}
+          for (const modelName in component.model) {
+            renderContent.push(
+              <ElFormItem label={component.model[modelName as keyof IComponentModel]}>
+                <ElInput
+                  v-model={
+                    (state.editData as EditBlocksSchema).model[modelName as keyof IComponentModel]
+                  }
+                />
               </ElFormItem>
             );
           }

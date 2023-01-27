@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:11
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 19:13:49
+ * @Last Modified time: 2023-01-27 20:57:39
  */
 import { computed, defineComponent, ref } from "vue";
 import deepcopy from "deepcopy";
@@ -181,6 +181,9 @@ const Editor = defineComponent({
         )
       });
     };
+    const handleUpdateFormData = (val: any) => {
+      emit("updateFormData", val);
+    };
 
     return () => {
       const render = editorCanvas.value ? (
@@ -210,6 +213,8 @@ const Editor = defineComponent({
                 <EditBlock
                   block={block}
                   preview={previewRef.value}
+                  formData={props.formData}
+                  onUpdateFormData={handleUpdateFormData}
                   onMouseDown={e => handleBlockMouseDown(e, block, index)}
                   onContextmenu={e => handleBlockContextmenu(e, block)}
                   onUpdateEditBlock={block => handleUpdateEditBlock(block, index)}
@@ -226,6 +231,8 @@ const Editor = defineComponent({
               <EditBlock
                 block={block}
                 preview={previewRef.value}
+                formData={props.formData}
+                onUpdateFormData={handleUpdateFormData}
                 onUpdateEditBlock={block => handleUpdateEditBlock(block, index)}
               />
             ))}

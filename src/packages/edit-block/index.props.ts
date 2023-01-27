@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-19 13:20:30
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-22 19:37:53
+ * @Last Modified time: 2023-01-27 20:55:41
  */
 import { EditBlocksSchema } from "@/schema/edit/edit.schema";
 import { PropType } from "vue";
@@ -19,6 +19,10 @@ export const IEditBlockProps = {
   onContextmenu: {
     type: Function as PropType<(e: MouseEvent) => void>,
     default: () => () => {}
+  },
+  formData: {
+    type: Object,
+    default: () => ({})
   }
 };
 export const IEditBlockEmits = {
@@ -27,5 +31,8 @@ export const IEditBlockEmits = {
   },
   mouseDown(e: MouseEvent) {
     return e !== null;
+  },
+  updateFormData(val: any) {
+    return val !== null;
   }
 };

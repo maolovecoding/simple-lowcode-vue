@@ -1,10 +1,11 @@
+import { IComponentModel } from "@/packages/utils/editor-config";
 import { CSSProperties } from "vue";
 
 /**
  * @Author: 毛毛
  * @Date: 2023-01-06 23:15:38
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 18:57:24
+ * @Last Modified time: 2023-01-27 19:43:13
  * 初始化配置
  */
 export default {
@@ -43,7 +44,8 @@ export default {
       left: 600,
       zIndex: 11,
       key: "input",
-      props: {}
+      props: {},
+      model: {}
     }
   ]
 } as EditSchema;
@@ -67,6 +69,7 @@ export interface EditBlocksSchema extends CSSProperties {
   alignCenter?: boolean; // 标识是否居中 从物料库第一次拖拽出来的时候应该居中
   focus?: boolean; // 在画布的组件是否获取到了焦点 获取了焦点可以拖拽
   props: IEditBlockProp;
+  model: IComponentModel;
 }
 export interface IEditBlockProp {
   text?: string;
