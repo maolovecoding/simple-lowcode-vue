@@ -2,13 +2,12 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 16:37:08
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 20:47:37
+ * @Last Modified time: 2023-01-27 21:39:51
  * @description 列表区可以显示所有的物料（默认使用elementPlus的组件）
  * schema key对应的组件映射关系
  */
 import { ElButton, ElInput } from "@/components/elementPlus";
 import { IEditBlockProp } from "@/schema/edit/edit.schema";
-import { ref } from "vue";
 import { createColorProps, createInputProps, createSelectProps } from "./createComponentProps";
 export const createEditorConfig = () => {
   const componentList: IComponent[] = [];
@@ -75,9 +74,9 @@ registerConfig.register({
 registerConfig.register({
   label: "输入框",
   preview: () => <ElInput placeholder="预览输入框" />,
-  render: ({ model }) => {
-    const aaa = ref("");
-    return <ElInput placeholder="渲染输入框" {...model!.default} />;
+  render: ({ model, props }) => {
+    // TODO bug 目前绑定提供的formData的属性值 会出现bug 待解决
+    return <ElInput placeholder="渲染输入框" {...model!.default} modelValue={props?.text} />;
   },
   key: "input",
   props: {

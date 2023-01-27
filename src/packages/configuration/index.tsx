@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:45
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 19:45:59
+ * @Last Modified time: 2023-01-27 21:33:04
  * @description 属性配置
  */
 import { defineComponent, inject, reactive, watch } from "vue";
@@ -34,10 +34,9 @@ export default defineComponent({
     const reset = () => {
       if (isNoKeysObject(props.block)) {
         // 说明要绑定的是容器的宽高
-        state.editData = deepcopy(props.configData.container);
+        state.editData = deepcopy(props?.configData?.container!);
       } else {
-        console.log(props.block);
-        state.editData = deepcopy(props.block);
+        state.editData = deepcopy(props.block!);
       }
     };
     watch(() => props.block, reset, { immediate: true });
@@ -46,17 +45,18 @@ export default defineComponent({
       if (isNoKeysObject(props.block)) {
         // 更新组件容器（画布）的大小
         props.updateContainer({
-          ...props.configData,
+          ...props.configData!,
           container: state.editData as EditContainerSchema
         });
       } else {
+        console.log(state.editData, "-----------------");
         // 更新组件配置
-        props.updateBlock(state.editData as EditBlocksSchema, props.block);
+        props.updateBlock(state.editData as EditBlocksSchema, props.block!);
       }
     };
     return () => {
       const renderContent: JSX.Element[] = [];
-      if (!Object.keys(props.block).length) {
+      if (isNoKeysObject(props.block)) {
         // 默认配置
         renderContent.push(
           <>
@@ -69,9 +69,10 @@ export default defineComponent({
           </>
         );
       } else {
-        const component = config.componentMap.get(props.block.key);
+        const component = config.componentMap.get(props?.block!.key);
         if (component && component.props) {
           for (const propName in component.props) {
+            console.log(component.props, (state.editData as EditBlocksSchema).props);
             const propConfig = component.props[propName as IComponentPropKeys]!;
             renderContent.push(
               <ElFormItem label={propConfig.label}>

@@ -2,14 +2,14 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:24
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 21:12:45
+ * @Last Modified time: 2023-01-27 21:29:03
  */
 import { computed, CSSProperties, defineComponent, inject, onMounted, ref } from "vue";
 import { IEditBlockProps, IEditBlockEmits } from "./index.props";
 import { configKey } from "../../packages/config";
 import "./index.style.less";
 import { IComponentModel } from "../utils/editor-config";
-import deepcopy from "deepcopy";
+
 export default defineComponent({
   props: {
     ...IEditBlockProps
@@ -29,7 +29,6 @@ export default defineComponent({
     onMounted(() => {
       // 获取容器的宽高
       const { offsetWidth, offsetHeight } = blockRef.value!;
-      // console.log(blockRef.value);
       const block = { ...props.block! };
       if (props.block?.alignCenter) {
         // 说明是拖拽松手的时候 此时需要居中
@@ -72,15 +71,9 @@ export default defineComponent({
       });
 
       const getClassName = () =>
-        props?.block?.key !== "input"
-          ? `edit-block ${
-              props.preview
-                ? "editor-block-preview"
-                : props.block?.focus
-                ? "editor-block-focus"
-                : ""
-            }`
-          : "edit-block";
+        `edit-block ${
+          props.preview ? "editor-block-preview" : props.block?.focus ? "editor-block-focus" : ""
+        }`;
       return (
         <div
           class={getClassName()}
