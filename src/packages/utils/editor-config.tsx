@@ -2,11 +2,11 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 16:37:08
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 21:39:51
+ * @Last Modified time: 2023-01-28 13:33:22
  * @description 列表区可以显示所有的物料（默认使用elementPlus的组件）
  * schema key对应的组件映射关系
  */
-import { ElButton, ElInput } from "@/components/elementPlus";
+import { ElButton, ElInput, ELRange } from "@/components/elementPlus";
 import { IEditBlockProp } from "@/schema/edit/edit.schema";
 import { ref } from "vue";
 import { createColorProps, createInputProps, createSelectProps } from "./createComponentProps";
@@ -86,6 +86,27 @@ registerConfig.register({
     default: "绑定字段"
   }
 });
+registerConfig.register({
+  label: "范围选择器",
+  preview: () => <ELRange />,
+  render: ({ model, props }) => {
+    return (
+      <ELRange
+        {...{
+          start: model?.start.modelValue,
+          "onUpdate:start": model?.start["onUpdate:modelValue"],
+          end: model?.end.modelValue,
+          "onUpdate:end": model?.end["onUpdate:modelValue"]
+        }}
+      />
+    );
+  },
+  key: "range",
+  model: {
+    start: "绑定字段start",
+    end: "绑定字段end"
+  }
+});
 export interface IComponent {
   label: string;
   preview: () => JSX.Element | string;
@@ -99,6 +120,7 @@ export interface IComponent {
 }
 export interface IComponentModel {
   default?: string;
+  [key: keyof any]: any;
 }
 export type IComponentPropKeys = keyof IComponentProps;
 export interface IComponentProps {

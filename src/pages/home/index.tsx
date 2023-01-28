@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-05 21:03:56
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 21:06:05
+ * @Last Modified time: 2023-01-28 13:34:50
  */
 import { defineComponent, ref, provide } from "vue";
 import Editor from "@/packages/edit";
@@ -17,7 +17,9 @@ export default defineComponent({
     provide(configKey, config);
     const formData = ref({
       username: "zs",
-      age: 22
+      age: 22,
+      start: 1,
+      end: 20
     });
     return () => {
       return (
