@@ -31,6 +31,8 @@ export const useBlockFocus = (
   };
   const handleMouseDown = (e: MouseEvent, block: EditBlocksSchema, index: number) => {
     if (previewRef.value) return;
+    e.preventDefault();
+    e.stopPropagation();
     // block上规划一个属性 focus 获取焦点后focus变成true
     if (e.shiftKey) {
       if (computedFocusOrUnfocusComponents.value.focus.length <= 1) {

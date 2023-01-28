@@ -31,8 +31,5 @@ export const IEditBlockEmits = {
   },
   mouseDown(e: MouseEvent) {
     return e !== null;
-  },
-  updateFormData(val: any) {
-    return val !== null;
   }
 };

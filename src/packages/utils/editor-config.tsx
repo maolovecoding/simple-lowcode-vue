@@ -8,6 +8,7 @@
  */
 import { ElButton, ElInput } from "@/components/elementPlus";
 import { IEditBlockProp } from "@/schema/edit/edit.schema";
+import { ref } from "vue";
 import { createColorProps, createInputProps, createSelectProps } from "./createComponentProps";
 export const createEditorConfig = () => {
   const componentList: IComponent[] = [];
@@ -75,8 +76,7 @@ registerConfig.register({
   label: "输入框",
   preview: () => <ElInput placeholder="预览输入框" />,
   render: ({ model, props }) => {
-    // TODO bug 目前绑定提供的formData的属性值 会出现bug 待解决
-    return <ElInput placeholder="渲染输入框" {...model!.default} modelValue={props?.text} />;
+    return <ElInput placeholder="渲染输入框" {...model?.default} />;
   },
   key: "input",
   props: {

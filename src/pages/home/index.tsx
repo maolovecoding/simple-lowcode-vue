@@ -19,19 +19,10 @@ export default defineComponent({
       username: "zs",
       age: 22
     });
-    const handleUpdateFormData = (val: any) => {
-      for (const key in val) {
-        formData.value[key] = val[key];
-      }
-    };
     return () => {
       return (
         <div>
-          <Editor
-            v-model={data.value}
-            formData={formData.value}
-            onUpdateFormData={handleUpdateFormData}
-          />
+          <Editor v-model={data.value} formData={formData.value} />
         </div>
       );
     };

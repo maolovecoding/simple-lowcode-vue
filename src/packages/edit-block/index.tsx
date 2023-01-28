@@ -42,8 +42,8 @@ export default defineComponent({
       emit("updateEditBlock", block);
     });
     const handleMouseDown = (e: MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
+      // e.preventDefault();
+      // e.stopPropagation();
       emit("mouseDown", e);
     };
     return () => {
@@ -55,14 +55,16 @@ export default defineComponent({
         props: componentProps,
         model: Object.keys(component.model || {}).reduce((prev, modelName) => {
           console.log(prev, modelName);
-          // modelName => username
+          // modelName => default
           const propName = props.block!.model[modelName as keyof IComponentModel]!;
           console.log(propName, props.formData[propName]);
           prev[modelName] = {
             // {default: {modelValue:"xx", "onUpdate": fn}}
             modelValue: props.formData[propName],
             "onUpdate:modelValue": (val: any) => {
-              emit("updateFormData", { [propName]: val });
+              // TODO 这里 不应该直接改变props 后续修复
+              // eslint-disable-next-line vue/no-mutating-props
+              props.formData[propName] = val;
               return val;
             }
           };

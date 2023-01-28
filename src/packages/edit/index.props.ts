@@ -15,8 +15,5 @@ export const IEditProps = {
 export const IEditEmits = {
   "update:modelValue"(newEditConfigData: EditSchema) {
     return newEditConfigData !== null;
-  },
-  updateFormData(val: any) {
-    return val !== null;
   }
 };

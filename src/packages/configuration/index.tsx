@@ -109,8 +109,9 @@ export default defineComponent({
         if (component && component.model) {
           // {default: "默认标签名"}
           for (const modelName in component.model) {
+            const label = component.model[modelName as keyof IComponentModel];
             renderContent.push(
-              <ElFormItem label={component.model[modelName as keyof IComponentModel]}>
+              <ElFormItem label={label}>
                 <ElInput
                   v-model={
                     (state.editData as EditBlocksSchema).model[modelName as keyof IComponentModel]

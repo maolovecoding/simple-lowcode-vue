@@ -181,9 +181,6 @@ const Editor = defineComponent({
         )
       });
     };
-    const handleUpdateFormData = (val: any) => {
-      emit("updateFormData", val);
-    };
 
     return () => {
       const render = editorCanvas.value ? (
@@ -214,7 +211,6 @@ const Editor = defineComponent({
                   block={block}
                   preview={previewRef.value}
                   formData={props.formData}
-                  onUpdateFormData={handleUpdateFormData}
                   onMouseDown={e => handleBlockMouseDown(e, block, index)}
                   onContextmenu={e => handleBlockContextmenu(e, block)}
                   onUpdateEditBlock={block => handleUpdateEditBlock(block, index)}
@@ -232,7 +228,6 @@ const Editor = defineComponent({
                 block={block}
                 preview={previewRef.value}
                 formData={props.formData}
-                onUpdateFormData={handleUpdateFormData}
                 onUpdateEditBlock={block => handleUpdateEditBlock(block, index)}
               />
             ))}
