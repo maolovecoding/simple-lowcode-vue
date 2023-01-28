@@ -136,7 +136,7 @@ const Editor = defineComponent({
     // 鼠标右键唤起菜单
     const handleBlockContextmenu = (e: MouseEvent, block: EditBlocksSchema) => {
       e.preventDefault();
-      console.log(e.target);
+      // console.log(e.target);
       // el 以哪个元素为准 产生一个dropdown
       useDropdown({
         el: e.target as HTMLElement,

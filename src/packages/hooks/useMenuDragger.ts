@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-19 13:55:40
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 19:44:22
+ * @Last Modified time: 2023-01-28 14:25:01
  * @description 实现菜单的拖拽
  */
 import { EditSchema } from "@/schema/edit/edit.schema";
@@ -26,7 +26,7 @@ export const useMenuDragger = <T extends HTMLDivElement | undefined>(
     e.dataTransfer!.dropEffect = "none";
   };
   const drop = (e: DragEvent) => {
-    console.log(currentComponent);
+    // console.log(currentComponent);
     // 画布上已经渲染过的组件
     const blocks = props.editConfigData!.blocks;
     const newEditConfigData: EditSchema = {

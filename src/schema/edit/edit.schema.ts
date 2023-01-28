@@ -5,7 +5,7 @@ import { CSSProperties } from "vue";
  * @Author: 毛毛
  * @Date: 2023-01-06 23:15:38
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 19:43:13
+ * @Last Modified time: 2023-01-28 16:35:21
  * 初始化配置
  */
 export default {
@@ -76,6 +76,7 @@ export interface IEditBlockProp {
   color?: string;
   size?: "default" | "large" | "small";
   type?: IEditBlockButtonType;
+  options?: { label: string; value: string }[];
 }
 
 export type IEditBlockButtonType =

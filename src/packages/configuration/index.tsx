@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:45
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 21:33:04
+ * @Last Modified time: 2023-01-28 14:30:46
  * @description 属性配置
  */
 import { defineComponent, inject, reactive, watch } from "vue";
@@ -22,6 +22,7 @@ import { IComponentModel, IComponentPropKeys } from "../utils/editor-config";
 import { EditBlocksSchema, EditContainerSchema, IEditBlockProp } from "@/schema/edit/edit.schema";
 import deepcopy from "deepcopy";
 import { isNoKeysObject } from "../utils";
+import { TableEditor } from "../components";
 
 export default defineComponent({
   props: { ...IConfigurationProps },
@@ -49,7 +50,6 @@ export default defineComponent({
           container: state.editData as EditContainerSchema
         });
       } else {
-        console.log(state.editData, "-----------------");
         // 更新组件配置
         props.updateBlock(state.editData as EditBlocksSchema, props.block!);
       }
@@ -72,8 +72,8 @@ export default defineComponent({
         const component = config.componentMap.get(props?.block!.key);
         if (component && component.props) {
           for (const propName in component.props) {
-            console.log(component.props, (state.editData as EditBlocksSchema).props);
             const propConfig = component.props[propName as IComponentPropKeys]!;
+            console.log(propConfig, "---aaa");
             renderContent.push(
               <ElFormItem label={propConfig.label}>
                 {{
@@ -100,6 +100,14 @@ export default defineComponent({
                         <ElOption label={option.label} value={option.value} />
                       ))}
                     </ElSelect>
+                  ),
+                  table: () => (
+                    <TableEditor
+                      propConfig={propConfig}
+                      v-model={
+                        (state.editData as EditBlocksSchema).props[propName as keyof IEditBlockProp]
+                      }
+                    />
                   )
                 }[propConfig.type]()}
               </ElFormItem>

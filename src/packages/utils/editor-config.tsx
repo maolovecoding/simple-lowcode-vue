@@ -2,14 +2,20 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 16:37:08
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-28 13:33:22
+ * @Last Modified time: 2023-01-28 16:38:32
  * @description 列表区可以显示所有的物料（默认使用elementPlus的组件）
  * schema key对应的组件映射关系
  */
-import { ElButton, ElInput, ELRange } from "@/components/elementPlus";
+import { ElButton, ElInput, ELRange, ElSelect } from "@/components/elementPlus";
 import { IEditBlockProp } from "@/schema/edit/edit.schema";
+import { ElOption } from "element-plus";
 import { ref } from "vue";
-import { createColorProps, createInputProps, createSelectProps } from "./createComponentProps";
+import {
+  createColorProps,
+  createInputProps,
+  createSelectProps,
+  createTableProp
+} from "./createComponentProps";
 export const createEditorConfig = () => {
   const componentList: IComponent[] = [];
   const componentMap = new Map<string, IComponent>();
@@ -107,6 +113,43 @@ registerConfig.register({
     end: "绑定字段end"
   }
 });
+registerConfig.register({
+  label: "下拉框",
+  preview: () => <ElSelect />,
+  render: ({ model, props }) => {
+    console.log(props, "----");
+    return (
+      <ElSelect
+        {...model?.default}
+        v-slots={{
+          default: () =>
+            (props?.options || []).map((opt, index) => <ElOption key={index} {...opt} />)
+        }}
+      />
+    );
+  },
+  key: "select",
+  model: {
+    default: "默认字段"
+  },
+  props: {
+    // options: {label, type, table }
+    options: createTableProp("下拉选择框", {
+      options: [
+        {
+          label: "显示值",
+          field: "label"
+        },
+        {
+          label: "绑定值",
+          field: "value"
+        }
+      ],
+      key: "label" // 显示给用户的值
+    })
+  }
+});
+
 export interface IComponent {
   label: string;
   preview: () => JSX.Element | string;
@@ -128,13 +171,15 @@ export interface IComponentProps {
   color?: IProps;
   size?: IProps;
   type?: IProps;
+  options?: IProps;
 }
 export interface IProps {
   label: string;
   type: IPropType;
   options?: IComponentPropOption[];
+  table?: any;
 }
-export type IPropType = "input" | "color" | "select";
+export type IPropType = "input" | "color" | "select" | "table";
 export interface IComponentPropOption {
   label: string;
   value: string;

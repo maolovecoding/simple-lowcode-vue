@@ -54,10 +54,10 @@ export default defineComponent({
       const RenderComponent = component.render({
         props: componentProps,
         model: Object.keys(component.model || {}).reduce((prev, modelName) => {
-          console.log(prev, modelName);
+          // console.log(prev, modelName);
           // modelName => default
           const propName = props.block!.model[modelName as keyof IComponentModel]!;
-          console.log(propName, props.formData[propName]);
+          // console.log(propName, props.formData[propName]);
           prev[modelName] = {
             // {default: {modelValue:"xx", "onUpdate": fn}}
             modelValue: props.formData[propName],
