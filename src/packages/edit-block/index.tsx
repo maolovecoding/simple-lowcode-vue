@@ -2,13 +2,14 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:24
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-27 21:29:03
+ * @Last Modified time: 2023-01-28 19:50:48
  */
 import { computed, CSSProperties, defineComponent, inject, onMounted, ref } from "vue";
 import { IEditBlockProps, IEditBlockEmits } from "./index.props";
 import { configKey } from "../../packages/config";
 import "./index.style.less";
 import { IComponentModel } from "../utils/editor-config";
+import BlockResize from "./blockResize";
 
 export default defineComponent({
   props: {
@@ -53,6 +54,9 @@ export default defineComponent({
       const componentProps = props.block?.props;
       const RenderComponent = component.render({
         props: componentProps,
+        size: props.block?.hasResize
+          ? { width: props.block.width as number, height: props.block.height as number }
+          : undefined,
         model: Object.keys(component.model || {}).reduce((prev, modelName) => {
           // console.log(prev, modelName);
           // modelName => default
@@ -71,6 +75,7 @@ export default defineComponent({
           return prev;
         }, {} as Record<keyof any, any>)
       });
+      const { width, height } = component.resize || {};
 
       const getClassName = () =>
         `edit-block ${
@@ -84,6 +89,10 @@ export default defineComponent({
           onMousedown={handleMouseDown}
           onContextmenu={props.onContextmenu}>
           {RenderComponent}
+          {props.block?.focus && (width || height) && (
+            // block 用来修改组件宽高 component中存放了是应该修改宽度还是高度
+            <BlockResize block={props.block} component={component} />
+          )}
         </div>
       );
     };

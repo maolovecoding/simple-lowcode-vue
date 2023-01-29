@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 16:37:08
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-28 16:38:32
+ * @Last Modified time: 2023-01-28 19:53:59
  * @description 列表区可以显示所有的物料（默认使用elementPlus的组件）
  * schema key对应的组件映射关系
  */
@@ -53,8 +53,11 @@ registerConfig.register({
 registerConfig.register({
   label: "按钮",
   preview: () => <ElButton>按钮</ElButton>,
-  render: ({ props }) => (
-    <ElButton type={props?.type} size={props?.size}>
+  render: ({ props, size }) => (
+    <ElButton
+      type={props?.type}
+      size={props?.size}
+      style={{ height: size?.height + "px", width: size?.width + "px" }}>
       {props?.text || "按钮"}
     </ElButton>
   ),
@@ -76,13 +79,23 @@ registerConfig.register({
       { label: "小", value: "samll" }
       // { label: "极小", value: "mini" }
     ])
+  },
+  resize: {
+    width: true,
+    height: true
   }
 });
 registerConfig.register({
   label: "输入框",
   preview: () => <ElInput placeholder="预览输入框" />,
-  render: ({ model, props }) => {
-    return <ElInput placeholder="渲染输入框" {...model?.default} />;
+  render: ({ model, size }) => {
+    return (
+      <ElInput
+        placeholder="渲染输入框"
+        {...model?.default}
+        style={{ height: size?.height + "px", width: size?.width + "px" }}
+      />
+    );
   },
   key: "input",
   props: {
@@ -90,6 +103,9 @@ registerConfig.register({
   },
   model: {
     default: "绑定字段"
+  },
+  resize: {
+    width: true // 宽度可以拉伸
   }
 });
 registerConfig.register({
@@ -117,7 +133,6 @@ registerConfig.register({
   label: "下拉框",
   preview: () => <ElSelect />,
   render: ({ model, props }) => {
-    console.log(props, "----");
     return (
       <ElSelect
         {...model?.default}
@@ -156,10 +171,12 @@ export interface IComponent {
   render: (options: {
     props?: IEditBlockProp;
     model?: Record<keyof any, any>;
+    size?: { width: number; height: number };
   }) => JSX.Element | string;
   key: string;
   props?: IComponentProps;
   model?: IComponentModel;
+  resize?: IComponentResize; // 组件是否可以自定义大小 拉伸
 }
 export interface IComponentModel {
   default?: string;
@@ -172,6 +189,10 @@ export interface IComponentProps {
   size?: IProps;
   type?: IProps;
   options?: IProps;
+}
+export interface IComponentResize {
+  width?: boolean;
+  height?: boolean;
 }
 export interface IProps {
   label: string;

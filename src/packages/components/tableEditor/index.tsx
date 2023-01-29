@@ -24,7 +24,6 @@ export default defineComponent({
         emit("update:modelValue", deepcopy(newVal));
       }
     });
-    console.log(data);
     const handleAdd = () => {
       useTableDialog({
         config: props.propConfig,

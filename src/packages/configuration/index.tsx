@@ -2,7 +2,7 @@
  * @Author: 毛毛
  * @Date: 2023-01-17 13:51:45
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-28 14:30:46
+ * @Last Modified time: 2023-01-28 19:12:40
  * @description 属性配置
  */
 import { defineComponent, inject, reactive, watch } from "vue";
@@ -73,7 +73,7 @@ export default defineComponent({
         if (component && component.props) {
           for (const propName in component.props) {
             const propConfig = component.props[propName as IComponentPropKeys]!;
-            console.log(propConfig, "---aaa");
+            // console.log(propConfig, "---aaa");
             renderContent.push(
               <ElFormItem label={propConfig.label}>
                 {{

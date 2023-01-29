@@ -5,7 +5,7 @@ import { CSSProperties } from "vue";
  * @Author: 毛毛
  * @Date: 2023-01-06 23:15:38
  * @Last Modified by: 毛毛
- * @Last Modified time: 2023-01-28 16:35:21
+ * @Last Modified time: 2023-01-28 19:48:46
  * 初始化配置
  */
 export default {
@@ -38,15 +38,15 @@ export default {
         type: "primary",
         size: "small"
       }
-    },
-    {
-      top: 500,
-      left: 600,
-      zIndex: 11,
-      key: "input",
-      props: {},
-      model: {}
     }
+    // ,{
+    //   top: 500,
+    //   left: 600,
+    //   zIndex: 11,
+    //   key: "input",
+    //   props: {},
+    //   model: {}
+    // }
   ]
 } as EditSchema;
 
@@ -70,6 +70,7 @@ export interface EditBlocksSchema extends CSSProperties {
   focus?: boolean; // 在画布的组件是否获取到了焦点 获取了焦点可以拖拽
   props: IEditBlockProp;
   model: IComponentModel;
+  hasResize?: boolean; // 是否修改过宽高
 }
 export interface IEditBlockProp {
   text?: string;
